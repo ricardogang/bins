@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIMPLE JAVA IDE</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"
+    
+  ></script>
+
+  <style type="text/css">
+
+    
+body {
+   width:960px;
+   margin:0 auto;
+}
+    
+#console {
+   border-radius: 5px;
+   border-style: groove;
+   min-height: 105px;
+   color: #C2C5C5;
+   background-color: #333333;
+}
+
+button {
+   border-radius: 5px;
+   width: 200px;
+   height: 35px ;
+   font-size: 15px;
+   background-color:white;
+    
+}
+
+textarea
+{
+    border:1px solid #999999;
+    width:97%;
+    margin:4px 0;
+    padding:1%;
+    resize: none;
+}
+
+.modal {
+    display: block; 
+    position: fixed; 
+    z-index: 5; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4);
+}
+    
+.modalCompilando {
+    display: none; 
+    position: fixed; 
+    z-index: 5; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4);
+}
+    
+#consentimiento {
+   font-family: Arial, Helvetica, sans-serif;
+   background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 5px solid #888;
+    width: 750px;
+   
+}
+    
+.rotate {
+	-webkit-animation: rotate 1s linear infinite ;  
+  animation: rotate ;
+}
+
+@keyframes rotate{
+  0% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+    
+#gear {
+  animation: rotate 5s linear infinite ;   
+  color:#33cc33;
+  font-size:50;
+}
+    
+#compilando{
+   font-family: Arial, Helvetica, sans-serif;
+text-align:center ;
+   background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+}
+    
+#editor {
+   padding: 5px;
+   border-radius: 7px;
+   border-style: groove;
+}
+    
+header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:3px; 
+    font-family: Lucida Console, Helvetica, sans-serif;
+}
+
+aside {
+    background-color:#f0f0f0;
+    float:left;
+    padding:11px; 
+    border-radius: 0px; 
+    font-family: Lucida Console, Helvetica, sans-serif;
+  
+}
+section {
+    background-color:gray;
+    clear:both;
+    text-align:left;
+}
+article {
+    clear:both;
+    text-align:left;
+    padding:3px;
+}
+footer {
+    background-color:gray;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px; 
+    font-family: Lucida Console, Helvetica, sans-serif;
+}
+
+.chkBoxLabel {
+  width: 100px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+}
+.chkBoxLabel2 {
+  width: 100px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+}
+.chkBoxLabel3 {
+  width: 100px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+}
+.chkBoxLabel:after {
+  content: "EXCERCISE";
+  border-style:solid;
+  width: 100px;
+  height: 17px;
+  background: #2879C9;
+  opacity: 0.5;
+}
+.chkBoxLabel2:after {
+  content: "NOTES";
+  border-style:solid;
+  width: 100px;
+  height: 17px;
+  background: #2879C9;
+  opacity: 0.5;
+}
+.chkBoxLabel3:after {
+  content: "OUTLINE";
+  border-style:solid;
+  width: 100px;
+  height: 17px;
+  background: #2879C9;
+  opacity: 0.5;
+}
+.chkBoxLabel:hover {
+  opacity: 0.3;
+}
+.chkBox[type=checkbox] {
+  opacity:0;
+}
+.chkBox:checked + label:after {
+  opacity: 1;
+}
+
+.blurred {
+	opacity: 0.1 ;
+}
+.notBlurred {
+	opacity: 1 ;
+}
+
+    
+  </style>
+
+  <title>IDE1</title>
+<script src="https://ajaxorg.github.io/ace-builds/src-noconflict/ace.js"></script>
+
+
+
+  
+</head>
+
+   <body>
+     <div id="avisoCompilando"  class="modalCompilando">
+       <div id="compilando">
+          <div id="gear">⚙️</div>
+         
+       </div>
+     </div>
+   <div id="avisoConsentimiento" class="modal">
+
+    <div id="consentimiento">
+    <span class="cerrarConsentimiento">
+        <button id="btnAceptarConsentimiento" onclick="aceptarConsentimiento()" style="width:250px">ACEPTAR CONDICIONES</button>
+        <button id="btnRechazarConsentimiento" onclick="rechazarConsentimiento()">RECHAZAR</button>
+    </span>
+    <h4>FÓRMULA DE CONSENTIMIENTO INFORMADO</h4>
+
+<p>
+Este sitio es parte de una investigación enfocada en la construcción de software para estudiar el proceso de aprendizaje de una estudiante de programación.  Se desea obtener información sobre las acciones del programador que evidencien sus habilidades metacognitivas en el proceso.
+</p>
+<p>
+Se le presentará un editor de código JAVA y solicitará programar la solución a un problema.  Todas sus acciones en el editor serán monitoreadas y registradas.  Adicionalmente se le puede solicitar reportar sobre su proceso mental para llegar a la solución.  
+Recuerde que todas sus acciones sobre el texto, el programa y los botones de compilar y ejecutar serán monitoreados y registrados.  Además, sus respuestas serán almacenadas para su posterior análisis. 
+</p>
+
+<p>
+Previo a dar su autorización para este estudio debe haber hablado con Ricardo Gang sobre este estudio y haber recibido respuestas satisfactorias a todas sus preguntas. Si quisiera más información puede obtenerla contactando al investigador a la dirección electrónica ricardogang@gmail.com.  Cualquier consulta adicional puede comunicarse a la Vicerrectoría de Investigación de la Universidad de Costa Rica a los teléfonos 2511-4201 ó 2511-5839, de lunes a viernes de 8 a.m. a 5 p.m.
+Su participación en este estudio es voluntaria. Tiene el derecho de negarse a participar o a discontinuar su participación en cualquier momento.  Su participación en este estudio es confidencial, los resultados podrían aparecer en una publicación científica o ser divulgados en una reunión científica pero de una manera anónima.
+</p>
+<p>No perderá ningún derecho legal por aceptar estas condiciones.
+</p>
+
+<h4>CONSENTIMIENTO</h4>
+<p>
+He leído toda la información descrita en esta fórmula, antes de aceptarla. Se me ha brindado la oportunidad de hacer preguntas y éstas han sido contestadas en forma adecuada. Por lo tanto, accedo a participar como sujeto de investigación en este estudio.
+</p>
+     
+<pre>
+UNIVERSIDAD DE COSTA RICA			
+VICERRECTORÍA DE INVESTIGACIÓN
+COMITÉ ÉTICO CIENTIFICO
+Teléfonos:(506) 2511-4201    Telefax: (506) 2224-9367
+</pre>
+</div>
+</div>
+
+
+<header align="left">SIMPLE JAVA IDE</header>
+
+
+<aside style="width:25%;float:left;">
+<article>
+  <input class="chkBox" type="checkbox" id="chkNotes" onchange="showNotes()"/>
+  <label class="chkBoxLabel2" for="chkNotes"></label>
+  <textarea oninput="showNotes()" class="blurred" id="txtNotes" style="height:153px" onFocus="showNotes()"></textarea>
+  
+</article>
+<article>
+  <input class="chkBox" type="checkbox"  id="chkExcercise" onchange="showExcercise()" />
+  <label class="chkBoxLabel" for="chkExcercise"></label>
+  <textarea class="blurred" id="txtExcercise" style="height:153px" onfocus="showExcercise()"></textarea>
+</article>
+<article>
+   <input class="chkBox" type="checkbox" id="chkOutline" onchange="showOutline()"/>
+  <label class="chkBoxLabel3" for="chkOutline"></label>
+  <ul id="outline" class="blurred" style="height:151px;background-color:white">
+  <li>a</li><li>a</li><li>a</li>
+</ul>
+</article>
+</aside>
+     
+<aside style="float:right;width:70%"> 
+  <article style="float:right">
+  <button id="btnCompile" class=button onclick="compile()">
+    <span style="color:#33cc33;font-size:30">⚙️</span>
+    COMPILE</button>
+  <button id="btnRun" width=700px class=button onclick="run()">
+    <span style="color:#33cc33;font-size:30">&#x25b6; </span>
+    COMPILE AND RUN</button>     
+</article>
+
+<article>
+<div id="editor" style="min-height: 350px " align="center">
+         public class Main { 
+            public static void main (String args[]) { 
+               System.out.println("hey!") ; 
+            } 
+         }
+</div>
+</article>
+<article><textarea id="console" style="min-height: 150px" onkeypress="sendText()"></textarea></article>
+
+</aside>
+
+
+<footer>ricardogang@gmail.com</footer>
+<script type="text/javascript">
+  var delta = "";
+  var deltaType = "";
+  var timer;
+  var codeBrowsing= false ;
+  var teclas=0 ;
+var editor = ace.edit("editor");
+editor.getSession().setMode("ace/mode/java");
+  
+window.onload=function(){
+
+
+
+var srr= false ;
+var input= "" ;
+var console=  document.getElementById("console") ;
+chkNotes=document.getElementById('chkNotes');
+  txtNotes=document.getElementById("txtNotes");
+  chkExcercise=document.getElementById('chkExcercise');
+  txtExcercise=document.getElementById("txtExcercise");
+}//onload
+ 
+function run() {
+   var msgCompilando= document.getElementById("avisoCompilando");
+   msgCompilando.style.display = "block";
+   var source = editor.getValue();
+   srr=true ;
+   pop("source_code=" + source + "&language_id=" + 27 + "&base64_encoded=false&wait=false&stdin=23");
+
+}
+
+/*document.getElementById("btnCompile").onclick =*/ function compile() {
+   var msgCompilando= document.getElementById("avisoCompilando");
+   msgCompilando.style.display = "block";
+   srr=false ;
+   var source = editor.getValue();
+   pop("source_code=" + source + "&language_id=" + 27 + "&base64_encoded=false&wait=false");
+
+}
+
+function sendText() {
+  if (event.keyCode == 13 && input.length>0) {
+      alert(input);
+      input= "";
+  } else {
+    input+= String.fromCharCode(event.keyCode) ; 
+    
+  }
+}
+
+
+function pop(msg) {
+   var xmlhttp = new XMLHttpRequest();
+   xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState == 4 && (xmlhttp.status >= 200) && (xmlhttp.status < 300)) {
+         if (xmlhttp.responseText.length > 0) {
+            var r = xmlhttp.response;
+            updateConsole(JSON.parse(r).token);
+         }
+      }
+   }
+   xmlhttp.open("POST", "https://api.judge0.com/submissions", true);
+   xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+   xmlhttp.send(msg);
+}
+
+
+function updateConsole(token, showRunResult) {
+   $.get("https://api.judge0.com/submissions/" + token + "?base64_encoded=false&fields=stdout,stderr,status_id,language_id,compile_output", function(response) {
+      if (response.status_id == 2) {
+         updateConsole(token);
+      } else {
+         result = response.compile_output;
+         if (result != null) {
+         	//alert(response.compile_output);
+            document.getElementById("console").value = response.compile_output;
+         } else {
+         	//alert(response.stdout);
+         	console.value = srr?response.stdout:"Success";
+         }
+      }
+   var msgCompilando= document.getElementById("avisoCompilando");
+   msgCompilando.style.display = "none";
+   });
+  
+}
+document.getElementById("editor").querySelector(".ace_text-input").addEventListener("keydown", function(e) {
+  key= window.event.key ;
+  teclas++;
+  switch(key){
+    case "ArrowUp":
+    case "ArrowDown":
+    case "ArrowLeft":
+    case "ArrowRight":
+    case "Home":
+    case "End":
+    case "PageUp":
+    case "PageDown":  
+      if (!codeBrowsing) {
+        deltaType="codeBrowsing";
+        saveDelta() ;
+        codeBrowsing= true ;
+      }
+      break;
+    case "Enter":
+      if (delta.length>0){
+        deltaType= "inputFromEnter" ;
+        saveDelta() ;
+      }
+    default:
+      
+      if(codeBrowsing) {
+        codeBrowsing= false ;  
+        deltaType= "stopBrowsing";
+        saveDelta() ;
+      }
+      break ;
+  }
+})
+ 
+editor.getSession().on('change', function() {
+  const key = window.event.key; 
+  switch (key){
+    case "Backspace": 
+      delta= delta.substring(0, delta.length-1);
+      console.log("backspace");
+      break ;
+    case "Delete":
+      delta= delta.substring(1, delta.length-1);
+      break ;
+  }
+  
+  switch (event.type){
+    case 'paste':
+      clipboardData = event.clipboardData || window.clipboardData;
+    pastedData = clipboardData.getData('Text');
+      console.log("clipboardData: "+pastedData);
+  }
+  //console.log("event.data: "+event) ;
+    if (event.data!= null){
+      delta += window.event.data;
+      teclas= delta.length ;
+    }
+  /*console.log("partial-delta: "+delta+"\nevent= "+ event+" event.data= "+event.data+" event.ClipboardData= "+event.ClipboardData);*/
+  
+  /*console.log("POSSIBLE DELTA?"+window.getSelection()) ;*/
+        
+  if (deltaType != event.type) {
+      deltaType = event.type;
+      
+      //console.log("cambio: 0:" + event.data.action + " 1:" + event.data.range + " 2:" + event.data.text + " delta:" + delta + " deltaType:" + deltaType);
+
+   }
+  
+   clearTimeout(timer);
+   timer = setTimeout(function(event) {
+       if (delta.length>0) {
+         saveDelta();
+       }
+   }, 2500);
+
+
+});//onchange 
+  
+editor.getSession().setUseSoftTabs(true);
+
+//}//onload
+
+function saveDelta(){
+  e= (typeof event=='undefined')?"timed":event ;
+  
+  var lineNumber=editor.getSelectionRange().start.row;
+  var line= editor.session.getLine(lineNumber);
+  
+  console.log("delta: " + delta + " deltaType:" + deltaType+ " Event: " + e + " teclas: " + teclas + " lineNumber: " + lineNumber + " line: " + line);
+  delta = "";
+  teclas= 0 ;
+  
+}
+
+function showOutline(){
+  chkOutline=document.getElementById('chkOutline');
+  outline=document.getElementById("outline");
+  if (chkOutline.checked) { 
+      outline.setAttribute("class","notBlurred");
+      setTimeout(function(){ 
+        outline.setAttribute("class","blurred");
+        chkOutline.checked=false ;
+      }, 10000);
+  } else {
+    chkOutline.checked=false ;        
+    outline.setAttribute("class","blurred");
+  }
+}
+
+function showNotes(){
+  if (chkNotes.checked) {
+      notes.setAttribute("class","notBlurred");
+      setTimeout(function(){ 
+        txtNotes.setAttribute("class","blurred");
+        chkNotes.checked=false ;        
+      }, 10000);
+  } else {
+    chkNotes.checked=false ;        
+    txtNotes.setAttribute("class","blurred");
+  }
+}
+
+function showExcercise(){
+  if (chkExcercise.checked) {
+      excercise.setAttribute("class","notBlurred");
+      setTimeout(function(){ 
+        txtExcercise.setAttribute("class","blurred");
+        chkExcercise.checked=false ;     
+      }, 10000);
+  } else {
+    chkExcercise.checked=false ;        
+    txtExcercise.setAttribute("class","blurred");
+  }
+}
+
+  
+function aceptarConsentimiento() {
+  document.getElementById('avisoConsentimiento').style.display = "none";
+  console.log("CONSENTIMIENTO ACEPTADO");
+}
+
+function rechazarConsentimiento() {
+    			/*document.getElementById('avisoConsentimiento').style.display = "none";*/
+  console.log("CONSENTIMIENTO RECHAZADO");
+  
+}
+
+         //var editor = ace.edit("editor");
+         document.getElementById("btnRun").onclick = function run(editor) {
+            var source = editor.getValue();
+            pop("source_code=" + source + "&language_id=" + 27 + "&base64_encoded=false&wait=false")
+         }
+
+         
+</script>
+   </body>
+</html>
+
+
+</body>
+
+</html>
+
